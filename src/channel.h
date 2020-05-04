@@ -1,3 +1,5 @@
+#pragma once
+
 #include "tsocket.h"
 #include "socket_exception.h"
 
