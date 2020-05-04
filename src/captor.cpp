@@ -2,14 +2,15 @@
 #include <sstream>
 #include <functional>
 
+#include "log.h"
 #include "captor.h"
+
+using std::ostringstream;
 
 using Tins::PDU;
 using Tins::Sniffer;
 using Tins::TCPIP::StreamFollower;
 using Tins::TCPIP::Stream;
-
-using std::ostringstream;
 
 std::string Captor::streamClientEndpoint(Stream &stream)
 {
@@ -43,7 +44,7 @@ std::string Captor::streamIdentifier(Stream &stream)
 {
     ostringstream output_;
 
-    output_ << Captor::streamClientEndpoint(stream) << "-" << Captor::streamServerEndpoint(stream);
+    output_ << Captor::streamClientEndpoint(stream) << " >> " << Captor::streamServerEndpoint(stream);
 
     return output_.str();
 }
@@ -62,7 +63,7 @@ Captor::~Captor()
 void Captor::onNewStream(Captor *pthis, Stream &stream)
 {
     std::string stream_id = Captor::streamIdentifier(stream);
-    std::cout << "[+] new connection:" << stream_id << std::endl;
+    CAP_I("[+] new connection:{}", stream_id);
 
     auto onCapClientData_ = std::bind(Captor::onCapClientData, pthis, std::placeholders::_1);
     stream.client_data_callback(onCapClientData_);
@@ -81,6 +82,7 @@ void Captor::onCapClientData(Captor *pthis, Stream &stream)
     std::string stream_id = Captor::streamIdentifier(stream);
     auto payload = stream.client_payload();
     std::string data(payload.begin(), payload.end());
+    CAP_I("[~] {} length:{}", stream_id, data.size());
     pthis->dispatch_.dispatch(stream_id, data);
 }
 
@@ -91,7 +93,7 @@ void Captor::onCapServerData(Captor *pthis, Stream &stream)
 void Captor::onEndStream(Captor *pthis, Stream &stream)
 {
     std::string stream_id = Captor::streamIdentifier(stream);
-    std::cout << "[-] end connetion:" << stream_id << std::endl;
+    CAP_I("[-] end connetion:{}", stream_id);
     pthis->dispatch_.closeChannel(stream_id);
 }
 

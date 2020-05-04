@@ -39,4 +39,4 @@ check_cxxlib('libtins', 'tins/tins.h')
 
 env = conf.Finish()
 
-Program('cap', Glob('src/*.cpp'), LIBS='tins', LIBPATH=['/usr/lib', '/usr/local/lib'], CPPPATH="src")
+Program('cap', Glob('src/*.cpp'), LIBS=['tins', 'pthread'], LIBPATH=['/usr/lib', '/usr/local/lib'], CPPPATH="src")

@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "log.h"
 #include "channel.h"
 
 using net::SocketException;
@@ -17,7 +18,7 @@ bool Channel::open()
         sock_.connect(ip_, port_);
         sock_.setblock(false);
     } catch (const SocketException &e) {
-        std::cerr << e.what() << std::endl;
+        CAP_E(e.what());
         return false;
     }
 
@@ -34,7 +35,7 @@ bool Channel::put(const std::string &data)
     try {
         sock_.send(data);
     } catch (const SocketException &e) {
-        std::cerr << e.what() << std::endl;
+        CAP_E(e.what());
         return false;
     }
     return true;
@@ -47,7 +48,7 @@ std::string Channel::get()
     try {
         data = sock_.recvall();
     } catch (const SocketException &e) {
-        std::cerr << e.what() << std::endl;
+        CAP_E(e.what());
     }
 
     return data;
