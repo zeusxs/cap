@@ -2,33 +2,31 @@
 #include <iostream>
 #include <exception>
 
-#include "tclap/CmdLine.h"
-#include "log.h"
+#include "command.h"
 #include "captor.h"
 
 int main(int argc, char *argv[]) {
-    TCLAP::CmdLine cmd("cap -d [device] -f [filter rules] -i [ip] -p [port]", ' ', "1.0");
-
-    TCLAP::ValueArg<std::string> device("d", "device", "capture net interface device eg: 'eth0', 'eth1', 'lo'", true, "", "str");
-    TCLAP::ValueArg<std::string> filter("f", "filter", "capture filter filter rule eg: 'tcp port 8000'", true, "", "str");
-    TCLAP::ValueArg<std::string> ip("i", "ip", "output ip", true, "", "str");
-    TCLAP::ValueArg<unsigned short> port("p", "port", "output port", true, 0, "int");
-
-    cmd.add(port);
-    cmd.add(ip);
-    cmd.add(filter);
-    cmd.add(device);
+    Command cmd;
+    
+    std::string device;
+    std::string filter;
+    std::string ip;
+    unsigned short port;
 
     try {
         cmd.parse(argc, argv);
+        device = cmd.device();
+        filter = cmd.filter();
+        ip = cmd.ip();
+        port = cmd.port();
     } catch (const TCLAP::ArgException &e) {
         std::cerr << e.what() << std::endl;
         return 1;
     }
-    
+
     try {
-        Captor cap(device.getValue(), ip.getValue(), port.getValue());
-        cap.setFilter(filter.getValue());
+        Captor cap(cmd.device(), cmd.ip(), cmd.port());
+        cap.setFilter(cmd.filter());
         cap.start();
     } catch (const std::exception & e) {
         std::cerr << e.what() << std::endl;
