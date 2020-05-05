@@ -86,14 +86,14 @@ void TSocket::send(const std::string &data) {
 
     while (need != 0) {
         const char *buffer = data.c_str() + nsend;
-
-        ssize_t retval = ::send(fd_, buffer, need, 0);
+        
+        ssize_t retval = ::send(fd_, buffer, need, MSG_NOSIGNAL);
         
         if (retval == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 retval = 0;
             } else if (errno == ECONNRESET || errno == EISCONN) {
-                throw ConnectException("send", strerror(errno));
+                throw SocketException("send", strerror(errno));
             } else {
                 throw SocketException("send", strerror(errno));
             }
