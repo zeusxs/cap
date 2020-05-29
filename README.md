@@ -48,6 +48,6 @@ cd cap && scons
 - [libtins](https://github.com/mfontanini/libtins)
 
 # Other Open project Thanks
-如下两个库集成到本项目中，所以不需要单独安装
+如下两个库已经集成到本项目中，所以不需要单独安装
 - [spdlog](https://github.com/gabime/spdlog)
 - [tclap](http://tclap.sourceforge.net/)
