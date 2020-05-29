@@ -11,6 +11,8 @@ public:
 
     void dispatch(const std::string &stream_id, const std::string &payload);
 
+    void clean(const std::string &stream_id);
+
     void openChannel(const std::string &stream_id);
 
     void closeChannel(const std::string &stream_id);

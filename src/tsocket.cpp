@@ -161,6 +161,10 @@ std::string TSocket::recvall()
     return data;
 }
 
+int TSocket::fileno() {
+    return fd_;
+}
+
 void TSocket::close() {
     ::close(fd_);
 }

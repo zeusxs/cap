@@ -82,12 +82,14 @@ void Captor::onCapClientData(Captor *pthis, Stream &stream)
     std::string stream_id = Captor::streamIdentifier(stream);
     auto payload = stream.client_payload();
     std::string data(payload.begin(), payload.end());
-    CAP_I("[~] {} length:{}", stream_id, data.size());
+    CAP_I("[~] {} cap data {} bytes", stream_id, data.size());
     pthis->dispatch_.dispatch(stream_id, data);
 }
 
 void Captor::onCapServerData(Captor *pthis, Stream &stream)
 {
+    std::string stream_id = Captor::streamIdentifier(stream);
+    pthis->dispatch_.clean(stream_id);
 }
 
 void Captor::onEndStream(Captor *pthis, Stream &stream)

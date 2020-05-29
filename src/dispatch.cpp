@@ -18,6 +18,15 @@ void Dispatch::dispatch(const std::string &stream_id, const std::string &payload
     }
 }
 
+void Dispatch::clean(const std::string &stream_id)
+{
+  auto iter = channel_hash_.find(stream_id);
+
+  if (iter != channel_hash_.end()) {
+      iter->second->get();
+  }
+}
+
 void Dispatch::openChannel(const std::string &stream_id)
 {
     Channel *channel = new Channel(ip_, port_);

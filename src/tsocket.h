@@ -24,6 +24,8 @@ public:
 
     std::string recvall();
 
+    int fileno();
+
     void close();
 private:
     int fd_;
