@@ -20,18 +20,32 @@ cd libtins && mkdir build && cd build
 cmake .. && make && make install
 ```
 
+编译cap
 ``` bash
 git clone https://github.com/zeusxs/cap.git
 cd cap && scons
 ```
 
-# 依赖
+使用
+``` shell
+./cap -d [device_name] -i [rule]
+```
 
-- [libpcap](https://github.com/the-tcpdump-group/libpcap)
-- [libtins](https://github.com/mfontanini/libtins)
+比如现在要把本地回路网卡上端口为8000的流量复制到172.17.0.2:9000的地址上
+``` shell
+# lo为本地网卡
+./cap -d lo -i 8000-172.17.0.2:9000
+
+# 如果需要抓取eth0网卡的流量, 使用如下命令
+./cap -d eth0 -i 8000-172.17.0.2:9000
+```
 
 # example:
 ![example](https://github.com/zeusxs/cap/blob/master/images/example.gif)
+
+# 依赖
+- [libpcap](https://github.com/the-tcpdump-group/libpcap)
+- [libtins](https://github.com/mfontanini/libtins)
 
 # Other Open project Thanks
 如下两个库集成到本项目中，所以不需要单独安装
